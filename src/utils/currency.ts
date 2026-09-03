@@ -2,10 +2,32 @@
  * Utilidades monetarias para Chile (UF y CLP) y cálculos de Renting Operativo OpEx
  */
 
-// Valor referencial UF 2026 en Chile
-export const CURRENT_UF_VALUE_CLP = 38540;
+// Valor referencial UF 2026 en Chile (fallback si la API en vivo no responde)
+export let CURRENT_UF_VALUE_CLP = 38540;
 export const CHILEAN_IVA_RATE = 0.19; // 19% IVA en Chile
 export const CORPORATE_TAX_RATE = 0.27; // 27% Impuesto de Primera Categoría (Régimen General Art. 14 A LIR)
+
+/**
+ * Obtiene el valor UF del día vigente desde mindicador.cl (API pública del
+ * Banco Central de Chile, sin key, con CORS habilitado) y actualiza el
+ * valor de referencia usado por toda la app. Si falla, se mantiene el
+ * valor de respaldo y no se lanza excepción.
+ */
+export async function fetchLiveUF(): Promise<{ value: number; date: string } | null> {
+  try {
+    const res = await fetch('https://mindicador.cl/api/uf');
+    if (!res.ok) return null;
+    const data = await res.json();
+    const valor = data?.serie?.[0]?.valor;
+    const fecha = data?.serie?.[0]?.fecha;
+    if (typeof valor !== 'number' || !(valor > 0)) return null;
+
+    CURRENT_UF_VALUE_CLP = Math.round(valor);
+    return { value: CURRENT_UF_VALUE_CLP, date: fecha ?? new Date().toISOString() };
+  } catch {
+    return null;
+  }
+}
 
 export function ufToClp(ufValue: number): number {
   return Math.round(ufValue * CURRENT_UF_VALUE_CLP);

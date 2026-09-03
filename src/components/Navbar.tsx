@@ -22,6 +22,7 @@ interface NavbarProps {
   onToggleCurrency: (currency: 'UF' | 'CLP') => void;
   selectedVehicleCount: number;
   onOpenQuoteBuilder: () => void;
+  ufUpdatedAt?: string | null;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -29,7 +30,15 @@ export const Navbar: React.FC<NavbarProps> = ({
   onToggleCurrency,
   selectedVehicleCount,
   onOpenQuoteBuilder,
+  ufUpdatedAt,
 }) => {
+  const ufTooltip = ufUpdatedAt
+    ? `UF vigente actualizada ${new Date(ufUpdatedAt).toLocaleDateString('es-CL', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+      })} (mindicador.cl / Banco Central)`
+    : 'Cargando valor UF vigente...';
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -51,7 +60,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           <div className="flex items-center space-x-4 text-slate-300">
-            <div className="flex items-center gap-1 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/60">
+            <div
+              className="flex items-center gap-1.5 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/60"
+              title={ufTooltip}
+            >
+              <span
+                className={`inline-block w-1.5 h-1.5 rounded-full ${
+                  ufUpdatedAt ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'
+                }`}
+              />
               <span className="text-slate-400">UF Hoy (SII):</span>
               <span className="font-mono font-bold text-amber-400">{formatCLP(CURRENT_UF_VALUE_CLP)}</span>
             </div>
@@ -68,10 +85,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Main Navigation Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between gap-6 h-20">
           {/* Brand Logo */}
-          <a href="#" className="flex items-center gap-3 group">
-            <WorkupLogo variant="compact" markHeight={38} theme="dark" />
+          <a href="#" className="flex items-center gap-3 group shrink-0">
+            <WorkupLogo variant="compact" markHeight={34} theme="dark" />
           </a>
 
           {/* Desktop Navigation Links */}

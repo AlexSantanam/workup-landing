@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { FleetCatalog } from './components/FleetCatalog';
@@ -9,12 +9,40 @@ import { CoverageMap } from './components/CoverageMap';
 import { QuoteBuilder } from './components/QuoteBuilder';
 import { TestimonialsAndClients } from './components/TestimonialsAndClients';
 import { Footer } from './components/Footer';
+import { CommercialBot } from './components/CommercialBot';
 import { FLEET_VEHICLES } from './data/fleetData';
 import { Vehicle, QuoteItem } from './types';
+import { fetchLiveUF } from './utils/currency';
 
 export default function App() {
   // Global Currency: UF or CLP
   const [currency, setCurrency] = useState<'UF' | 'CLP'>('UF');
+
+  // Live UF value (fetched from mindicador.cl). Drives a re-render so every
+  // formatCLP/ufToClp call across the app picks up the fresh reference value.
+  const [ufUpdatedAt, setUfUpdatedAt] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const refreshUF = () => {
+      fetchLiveUF().then((result) => {
+        if (!cancelled && result) {
+          setUfUpdatedAt(result.date);
+        }
+      });
+    };
+
+    refreshUF();
+    // La UF se publica una vez al día (SII/Banco Central); reintentamos cada
+    // 30 min por si la pestaña queda abierta hasta la próxima publicación.
+    const interval = window.setInterval(refreshUF, 30 * 60 * 1000);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
+  }, []);
 
   // Selected vehicle for detailed technical modal
   const [selectedVehicleForModal, setSelectedVehicleForModal] = useState<Vehicle | null>(null);
@@ -102,6 +130,7 @@ export default function App() {
         onToggleCurrency={setCurrency}
         selectedVehicleCount={totalSelectedUnits}
         onOpenQuoteBuilder={scrollToQuote}
+        ufUpdatedAt={ufUpdatedAt}
       />
 
       {/* Main Content Sections */}
@@ -161,6 +190,9 @@ export default function App() {
         onClose={() => setSelectedVehicleForModal(null)}
         onAddToQuote={handleAddVehicleToQuote}
       />
+
+      {/* Floating Commercial Chat Bot */}
+      <CommercialBot />
 
     </div>
   );

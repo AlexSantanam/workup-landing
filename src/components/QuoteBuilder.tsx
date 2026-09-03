@@ -775,7 +775,7 @@ export const QuoteBuilder: React.FC<QuoteBuilderProps> = ({
             {/* Actions */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               <a
-                href={`https://wa.me/56984501200?text=${encodeURIComponent(
+                href={`https://wa.me/56973888336?text=${encodeURIComponent(
                   `Hola WORKUP, requiero asistencia para la cotización ${submittedQuote.id} (${submittedQuote.companyName} - RUT ${submittedQuote.companyRut}).`
                 )}`}
                 target="_blank"
