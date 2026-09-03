@@ -1,0 +1,6 @@
+{
+  "name": "WORKUP - Renting de Flotas Comerciales, Furgones, Camiones & Grúas",
+  "description": "Plataforma chilena de renting operativo para empresas: furgones de reparto (Blue Express/panaderías), camiones de fletes de gran volumen, servicio de grúas, camionetas 4x4 y estándar minero con cotizador interactivo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

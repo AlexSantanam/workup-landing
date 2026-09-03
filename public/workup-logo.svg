@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 110" width="100%" height="100%">
+  <!-- WORKUP Signature Mark: Orange W with Upward Arrow -->
+  <path 
+    d="M 6 42 L 26 42 L 42 76 L 58 42 L 74 76 L 109.9 35.8 L 101.9 30.8 L 136 12 L 134.1 50.9 L 126 45.9 L 102 98 L 84 98 L 68 64 L 52 98 L 34 98 Z" 
+    fill="#F2541B" 
+  />
+  
+  <!-- WORKUP Wordmark -->
+  <text 
+    x="156" 
+    y="74" 
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Montserrat', sans-serif" 
+    font-weight="900" 
+    font-size="64" 
+    letter-spacing="-1.5" 
+    fill="#111827"
+  >WORKUP</text>
+  
+  <!-- Subtitle: INDUSTRIAL VEHICLE RENTAL -->
+  <text 
+    x="158" 
+    y="98" 
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Montserrat', sans-serif" 
+    font-weight="700" 
+    font-size="14.5" 
+    letter-spacing="3.8" 
+    fill="#4B5563"
+  >INDUSTRIAL VEHICLE RENTAL</text>
+</svg>
