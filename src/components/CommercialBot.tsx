@@ -15,7 +15,8 @@ interface Intent {
   scrollTo?: string;
 }
 
-const INTENTS: Intent[] = [
+// Temas de negocio: abren una sección del sitio y aparecen como chips de acceso rápido.
+const TOPIC_INTENTS: Intent[] = [
   {
     keywords: ['flota', 'vehiculo', 'camion', 'furgon', 'camioneta', 'grua', 'catalogo', 'modelo'],
     response: 'Tenemos furgones de courier, unidades refrigeradas, camiones de flete, camiones pluma y camionetas 4x4. Te llevo al catálogo completo.',
@@ -43,6 +44,33 @@ const INTENTS: Intent[] = [
   },
 ];
 
+// Conversacionales: saludos, agradecimientos, ayuda genérica. No abren secciones ni son chips,
+// pero cuentan como "entendido" para no gastar los intentos antes del escalamiento a WhatsApp.
+const CONVERSATIONAL_INTENTS: Intent[] = [
+  {
+    keywords: ['hola', 'buenas', 'buenos dias', 'buenas tardes', 'buenas noches', 'que tal', 'saludos', 'hey', 'oye'],
+    response: '¡Hola! Un gusto saludarte. Puedo ayudarte con flota disponible, cotizaciones, ahorro tributario, cobertura nacional o la norma SERNAGEOMIN. ¿Qué te interesa?',
+  },
+  {
+    keywords: ['gracias', 'muchas gracias', 'ok gracias', 'perfecto gracias', 'buenisimo'],
+    response: 'De nada, para eso estamos. Si necesitas algo más, aquí sigo, o hablamos directo por WhatsApp con un ejecutivo.',
+  },
+  {
+    keywords: ['ayuda', 'opciones', 'menu', 'que puedes hacer', 'en que me ayudas', 'que sabes hacer', 'quien eres', 'eres un bot', 'eres humano'],
+    response: 'Soy el asistente virtual de WORKUP. Puedo orientarte sobre nuestra flota, generar acceso al cotizador, mostrarte el ahorro tributario del renting, la cobertura nacional o la norma SERNAGEOMIN DS 132 — y si prefieres hablar con una persona, te conecto por WhatsApp cuando quieras.',
+  },
+  {
+    keywords: ['quienes son', 'empresa workup', 'sobre ustedes', 'que es workup', 'a que se dedican'],
+    response: 'WORKUP es una empresa chilena de renting operativo de flotas comerciales: furgones, camiones de flete, camiones pluma, unidades refrigeradas y camionetas 4x4, con bases desde Antofagasta hasta Rancagua.',
+  },
+  {
+    keywords: ['horario', 'atencion', 'telefono', 'llamar', 'numero de contacto', 'contacto'],
+    response: 'Nuestra Mesa de Ayuda en ruta atiende 24/7 al 600 400 9000. Si prefieres, te dejo el WhatsApp directo con un ejecutivo comercial.',
+  },
+];
+
+const ALL_INTENTS: Intent[] = [...CONVERSATIONAL_INTENTS, ...TOPIC_INTENTS];
+
 function normalize(text: string): string {
   return text
     .toLowerCase()
@@ -52,7 +80,7 @@ function normalize(text: string): string {
 
 function matchIntent(rawText: string): Intent | null {
   const text = normalize(rawText);
-  return INTENTS.find((intent) => intent.keywords.some((kw) => text.includes(kw))) ?? null;
+  return ALL_INTENTS.find((intent) => intent.keywords.some((kw) => text.includes(kw))) ?? null;
 }
 
 const MAX_FAILED_ATTEMPTS = 2;
@@ -203,7 +231,7 @@ export const CommercialBot: React.FC = () => {
 
           {/* Quick Replies */}
           <div className="px-3.5 pb-2 flex flex-wrap gap-1.5 border-t border-slate-800 pt-2.5">
-            {INTENTS.map((intent) => (
+            {TOPIC_INTENTS.map((intent) => (
               <button
                 key={intent.scrollTo}
                 type="button"
