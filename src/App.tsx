@@ -10,11 +10,15 @@ import { QuoteBuilder } from './components/QuoteBuilder';
 import { TestimonialsAndClients } from './components/TestimonialsAndClients';
 import { Footer } from './components/Footer';
 import { CommercialBot } from './components/CommercialBot';
+import { SplashScreen } from './components/SplashScreen';
 import { FLEET_VEHICLES } from './data/fleetData';
 import { Vehicle, QuoteItem } from './types';
 import { fetchLiveUF } from './utils/currency';
 
 export default function App() {
+  // Splash screen shown on entry before revealing the main site
+  const [showSplash, setShowSplash] = useState(true);
+
   // Global Currency: UF or CLP
   const [currency, setCurrency] = useState<'UF' | 'CLP'>('UF');
 
@@ -123,7 +127,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">
-      
+
+      {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
+
       {/* 1. Header / Navbar */}
       <Navbar
         currency={currency}
